@@ -17,9 +17,9 @@
       </li>
     </ul>
     <form (ngSubmit)="login()" #loginForm="ngForm" *ngIf="!loggedIn()" class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" #text="ngModel" placeholder="Login" aria-label="Search" name="userName" required
+      <input class="form-control mr-sm-2" type="text"  placeholder="Login" aria-label="Search" name="userName" required
         [(ngModel)]="model.userName">
-      <input class="form-control mr-sm-2" type="password" #password="ngModel" placeholder="Hasło" aria-label="Search" required
+      <input class="form-control mr-sm-2" type="password"  placeholder="Hasło" aria-label="Search" required
         name="password" [(ngModel)]="model.password">
 
       <button class="btn btn-outline-success my-2 my-sm-0" [disabled]="loginForm.invalid" type="submit">Sign in</button>

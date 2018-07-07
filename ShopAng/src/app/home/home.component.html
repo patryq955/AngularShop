@@ -10,6 +10,6 @@
 <hr>
 <div class="container" *ngIf="registerMode" >
   <div class="col-md-4 offset-4">
-    <app-register></app-register>
+    <app-register (cancelRegisterEvent)="cancelRegister($event)"></app-register>
   </div>
 </div>

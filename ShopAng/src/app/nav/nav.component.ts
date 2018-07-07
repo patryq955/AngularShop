@@ -21,6 +21,7 @@ export class NavComponent implements OnInit {
         console.log("succes");
       },
       error => {
+        alert("Niepoprawny login lub hasło");
         console.log(error);
       }
     );

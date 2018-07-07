@@ -21,13 +21,12 @@
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "../node_modules/font-awesome/css/font-awesome.min.css",
-        "styles.css"
+        "styles.scss"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.slim.min.js",
         "../node_modules/popper.js/dist/umd/popper.min.js",
         "../node_modules/bootstrap/dist/js/bootstrap.min.js"
-        
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -61,7 +60,8 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
-    "component": {}
+    "styleExt": "scss",
+    "component": {
+    }
   }
 }

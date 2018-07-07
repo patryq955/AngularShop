@@ -8,5 +8,4 @@ import {AppModule} from './app.module';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Gowno';
 }
