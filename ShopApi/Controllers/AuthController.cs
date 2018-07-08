@@ -8,11 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ShopApi.Data;
 using ShopApi.Dtos;
+using ShopApi.Filters;
 using ShopApi.Models;
 
 namespace ShopApi.Controllers
 {
     [Route("api/[controller]")]
+    [ValidateModel]
     public class AuthController : Controller
     {
         private readonly IConfiguration _config;
@@ -26,17 +28,12 @@ namespace ShopApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]UserForRegisterDto userForRegisterDto)
         {
-
-            userForRegisterDto.UserName = userForRegisterDto.UserName.ToLower();
+            if (!string.IsNullOrEmpty(userForRegisterDto.UserName))
+                userForRegisterDto.UserName = userForRegisterDto.UserName.ToLower();
 
             if (await _authRepo.UserExists(userForRegisterDto.UserName))
             {
                 ModelState.AddModelError("UserName", "User exists");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
             }
 
             var newUser = new User

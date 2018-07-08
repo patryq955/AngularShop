@@ -4,11 +4,12 @@ namespace ShopApi.Dtos
 {
     public class UserForRegisterDto
     {
-        [Required]
+        [Required(ErrorMessage="Nazwa użytkownika jest wymagana")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage="Hasło jest wymagane")]
         [StringLength(40,MinimumLength=4,ErrorMessage="Password is too short")  ]
+        
         public string Password { get; set; }
     }
 }

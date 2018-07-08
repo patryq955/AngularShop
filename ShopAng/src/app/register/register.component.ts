@@ -20,10 +20,9 @@ export class RegisterComponent implements OnInit {
         console.log("register succesful");
       },
       error => {
-        console.log("Register failer");
+        console.log(error);
       }
     );
-    console.log(this.model.userName + this.model.password);
   }
 
   cancel() {
