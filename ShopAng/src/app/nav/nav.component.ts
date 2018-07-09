@@ -1,3 +1,4 @@
+import { AlertifyService } from './../_services/alertify.service';
 import { Observable } from "rxjs/Observable";
 import { AuthService } from "../_services/auth.service";
 import { FormGroup, FormControl } from "@angular/forms/src/model";
@@ -11,18 +12,17 @@ import { NgForm } from "@angular/forms";
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,private alertifyService: AlertifyService) {}
 
   ngOnInit() {}
 
   login() {
     this.authService.login(this.model).subscribe(
       data => {
-        console.log("succes");
+        this.alertifyService.succes("Logowanie pomyślne");
       },
       error => {
-        alert("Niepoprawny login lub hasło");
-        console.log(error);
+        this.alertifyService.error(error);
       }
     );
   }
@@ -30,13 +30,12 @@ export class NavComponent implements OnInit {
   logout() {
     this.authService.userToken = null;
     localStorage.removeItem("token");
-    console.log("Logout");
+    this.alertifyService.message("Wylogowano");
     this.model.password = "";
     this.model.userName = "";
   }
 
   loggedIn(): boolean {
-    const token = localStorage.getItem("token");
-    return !!token;
+    return this.authService.loggedIn();
   }
 }
