@@ -11,8 +11,8 @@ using System;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20180506114530_InitialCreate3")]
-    partial class InitialCreate3
+    [Migration("20180729170152_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

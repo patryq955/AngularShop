@@ -1,4 +1,4 @@
-import { AlertifyService } from './../_services/alertify.service';
+import { AlertifyService } from '../_services/alertify.service';
 import { Observable } from "rxjs/Observable";
 import { AuthService } from "../_services/auth.service";
 import { FormGroup, FormControl } from "@angular/forms/src/model";
@@ -12,7 +12,7 @@ import { NgForm } from "@angular/forms";
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  constructor(private authService: AuthService,private alertifyService: AlertifyService) {}
+  constructor(public authService: AuthService,private alertifyService: AlertifyService) {}
 
   ngOnInit() {}
 
@@ -28,7 +28,6 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
-    this.authService.userToken = null;
     localStorage.removeItem("token");
     this.alertifyService.message("Wylogowano");
     this.model.password = "";

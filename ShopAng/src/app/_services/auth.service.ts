@@ -1,31 +1,33 @@
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Observable } from "rxjs/Observable";
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpRequest } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import { JwtHelperService } from "@auth0/angular-jwt";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class AuthService {
   baseUrl = "http://localhost:5000/api/auth/";
 
   private jwtHelper = new JwtHelperService();
-  userToken: any;
+  decodedToken: any;
+
   constructor(private http: HttpClient) {}
 
   login(model: any) {
     return this.http
       .post<string>(this.baseUrl + "login", model, this.getHeaders())
-      .map((response: any) => {
-        const user = response;
-        if (user) {
-          localStorage.setItem("token", user.tokenString);
-          this.userToken = user.tokenString;
-        }
-      })
-      .catch(this.handleError);
+      .pipe(
+        map((response: any) => {
+          const user = response;
+          if (user) {
+            localStorage.setItem("token", user.tokenString);
+            this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
+          }
+        })
+      ).catch(this.handleError);
   }
 
   register(model: any) {
