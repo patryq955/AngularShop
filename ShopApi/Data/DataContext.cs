@@ -11,5 +11,7 @@ namespace ShopApi.Data
         }
 
         public DbSet<User> Users {get;set;}
+        public DbSet<House> House {get;set;}
+
     }
 }
