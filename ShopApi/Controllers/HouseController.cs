@@ -17,7 +17,7 @@ namespace ShopApi.Controllers
         [HttpGet("GetHouse")]
         public async Task<IActionResult> GetHouse(int id)
         {
-            var test = _uow.Repository<House>().GetByID(id);
+            var test = await _uow.Repository<House>().GetByID(id);
             return Json(test);
         }
 
