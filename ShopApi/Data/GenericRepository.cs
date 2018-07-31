@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ShopApi.Data
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        TEntity GetByID(object id);
-        IEnumerable<TEntity> Get(
+        Task<TEntity> GetByID(object id);
+        Task<IEnumerable<TEntity>> Get(
                    Expression<Func<TEntity, bool>> filter = null,
                    Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                    string includeProperties = "");
@@ -30,7 +31,7 @@ namespace ShopApi.Data
             this.dbSet = db.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> Get(
+        public async virtual Task<IEnumerable<TEntity>> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "")
@@ -50,16 +51,19 @@ namespace ShopApi.Data
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                var ordered = await orderBy(query).ToListAsync();
+                return ordered;
             }
             else
             {
-                return query.ToList();
+                var result = await query.ToListAsync();
+                return result;
             }
         }
-        public virtual TEntity GetByID(object id)
+        public async Task<TEntity> GetByID(object id)
         {
-            return dbSet.Find(id);
+            var tmp =  await dbSet.FindAsync(id);
+            return tmp;
         }
         public virtual void Insert(TEntity entity)
         {
@@ -85,7 +89,5 @@ namespace ShopApi.Data
             dbSet.Attach(entityToUpdate);
             _db.Entry(entityToUpdate).State = EntityState.Modified;
         }
-
-
     }
 }

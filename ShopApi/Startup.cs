@@ -20,6 +20,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ShopApi.Data;
 using ShopApi.Helpers;
+using AutoMapper;
 
 namespace ShopApi
 {
@@ -41,11 +42,16 @@ namespace ShopApi
 {
     options.DefaultRequestCulture = new RequestCulture("pl-PL");
 });
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(
+                opt =>
+                {
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                }
+            );
             services.AddCors();
             services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IGenericUnitOfWork,GenericUnitOfWork>();
-
+            services.AddScoped<IGenericUnitOfWork, GenericUnitOfWork>();
+            services.AddAutoMapper();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>
                {

@@ -8,13 +8,10 @@ namespace ShopApi.Controllers
 {
     [Route("api/[controller]")]
     [ValidateModel]
-    public class HouseController : Controller
+    public class HouseController : BaseController
     {
-        private IGenericUnitOfWork _uow;
-
-        public HouseController(IGenericUnitOfWork uow)
+        public HouseController(IGenericUnitOfWork uow) : base(uow)
         {
-            _uow = uow;
         }
 
         [HttpGet("GetHouse")]
@@ -24,10 +21,5 @@ namespace ShopApi.Controllers
             return Json(test);
         }
 
-        [HttpGet("test")]
-        public async Task<IActionResult> Test()
-        {
-            return Ok();
-        }
     }
 }
