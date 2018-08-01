@@ -1,23 +1,35 @@
-import {Routes} from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { HousesListComponent } from './houses-list/houses-list.component';
-import { ContactComponent } from './contact/contact.component';
-import { MyOfferComponent } from './my-offer/my-offer.component';
-import { AuthGuard } from './_guards/auth.guard';
+import { Routes } from "@angular/router";
+import { HomeComponent } from "./home/home.component";
+import { HousesListComponent } from "./houses/houses-list/houses-list.component";
+import { ContactComponent } from "./contact/contact.component";
+import { MyOffersComponent } from "./my-offers/my-offers.component";
+import { AuthGuard } from "./_guards/auth.guard";
+import { NewOfferComponent } from "./new-offer/new-offer.component";
+import { HouseDetailComponent } from "./houses/house-detail/house-detail.component";
+import { HouseDetailResolver } from "./_resolves/house-detail.resolver";
+import { HouseListResolver } from "./_resolves/houses-list.resolver";
 
 export const appRoutes: Routes = [
-
-    {path: '', component: HomeComponent},
-    {path: 'mieszkania', component: HousesListComponent},
-    {path: 'kontakt', component: ContactComponent},
-    {
-        path:'',
-        runGuardsAndResolvers: 'always',
-        canActivate: [AuthGuard],
-        children: [
-            {path: 'moje-oferty', component: MyOfferComponent},
-        ]
-    },
-    {path: '**',redirectTo: '', pathMatch: 'full'}
-
-]
+  { path: "", component: HomeComponent },
+  {
+    path: "mieszkania",
+    component: HousesListComponent,
+    resolve: { houses: HouseListResolver }
+  },
+  {
+    path: "mieszkanie/:id",
+    component: HouseDetailComponent,
+    resolve: { house: HouseDetailResolver }
+  },
+  { path: "kontakt", component: ContactComponent },
+  {
+    path: "",
+    runGuardsAndResolvers: "always",
+    canActivate: [AuthGuard],
+    children: [
+      { path: "moje-oferty", component: MyOffersComponent },
+      { path: "dodaj", component: NewOfferComponent }
+    ]
+  },
+  { path: "**", redirectTo: "", pathMatch: "full" }
+];

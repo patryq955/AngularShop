@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ShopApi.Migrations
 {
-    public partial class AddHouseClass : Migration
+    public partial class InitialCreate2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

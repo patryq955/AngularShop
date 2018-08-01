@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShopApi.Dtos
 {
-    public class UserDetailedDto
+    public class UserDetailDto
     {
         public string UserName { get; set; }
 

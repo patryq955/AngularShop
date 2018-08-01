@@ -6,10 +6,11 @@ import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { map } from "rxjs/operators";
+import { environment } from "../../environments/environment";
 
 @Injectable()
 export class AuthService {
-  baseUrl = "http://localhost:5000/api/auth/";
+  baseUrl = environment.apiUrl + "auth/";
 
   private jwtHelper = new JwtHelperService();
   decodedToken: any;

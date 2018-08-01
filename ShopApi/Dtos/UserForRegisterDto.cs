@@ -8,7 +8,7 @@ namespace ShopApi.Dtos
         public string UserName { get; set; }
 
         [Required(ErrorMessage="Hasło jest wymagane")]
-        [StringLength(40,MinimumLength=4,ErrorMessage="Password is too short")  ]
+        [StringLength(40,MinimumLength=4,ErrorMessage="Hasło jest za krótkie")  ]
         
         public string Password { get; set; }
     }

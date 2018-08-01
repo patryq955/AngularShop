@@ -11,8 +11,5 @@ namespace ShopApi.Models
         public string Url {get;set;}
 
         public DateTime DateAdd {get;set;}
-
-
-
     }
 }

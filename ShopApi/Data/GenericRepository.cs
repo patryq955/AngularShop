@@ -9,11 +9,11 @@ namespace ShopApi.Data
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetByID(object id);
+        Task<TEntity> GetByID(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
         Task<IEnumerable<TEntity>> Get(
                    Expression<Func<TEntity, bool>> filter = null,
                    Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-                   string includeProperties = "");
+                   params Expression<Func<TEntity, object>>[] includes);
         void Insert(TEntity entity);
         void Delete(TEntity entity);
 
@@ -34,7 +34,7 @@ namespace ShopApi.Data
         public async virtual Task<IEnumerable<TEntity>> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "")
+            params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -43,10 +43,12 @@ namespace ShopApi.Data
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            if (includes.Any())
             {
-                query = query.Include(includeProperty);
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
             }
 
             if (orderBy != null)
@@ -60,11 +62,24 @@ namespace ShopApi.Data
                 return result;
             }
         }
-        public async Task<TEntity> GetByID(object id)
+        public async Task<TEntity> GetByID(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
-            var tmp =  await dbSet.FindAsync(id);
+            IQueryable<TEntity> query = dbSet;
+
+            query = query.Where(predicate);
+
+            if (includes.Any())
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            var tmp = await query.FirstOrDefaultAsync();
             return tmp;
         }
+
         public virtual void Insert(TEntity entity)
         {
             dbSet.Add(entity);

@@ -1,21 +1,41 @@
-import { AlertifyService } from "./_services/alertify.service";
-import { AuthService } from "./_services/auth.service";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { FormsModule } from "@angular/forms";
+import { AuthGuard } from "./_guards/auth.guard";
+import { appRoutes } from "./routes";
+import { NgxImageGalleryModule } from 'ngx-image-gallery';
 
+//Component
 import { AppComponent } from "./app.component";
 import { NavComponent } from "./nav/nav.component";
-import { FormsModule } from "@angular/forms";
 import { RegisterComponent } from "./register/register.component";
 import { HomeComponent } from "./home/home.component";
-import { HousesListComponent } from "./houses-list/houses-list.component";
+import { HousesListComponent } from "./houses/houses-list/houses-list.component";
 import { ContactComponent } from "./contact/contact.component";
-import { MyOfferComponent } from "./my-offer/my-offer.component";
-import { appRoutes } from "./routes";
-import { AuthGuard } from "./_guards/auth.guard";
+import { MyOffersComponent } from "./my-offers/my-offers.component";
+import { HouseDetailComponent } from "./houses/house-detail/house-detail.component";
+
+
+//Services
+import { AlertifyService } from "./_services/alertify.service";
+import { AuthService } from "./_services/auth.service";
+import { UserService } from "./_services/user.service";
+import { HouseService } from "./_services/house.service";
+
+//Bootstrap
+import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { ModalModule } from "ngx-bootstrap/modal";
+import { NewOfferComponent } from "./new-offer/new-offer.component";
+import { HouseComponent } from "./houses/house/house.component";
+import { JwtModule } from "@auth0/angular-jwt";
+import { HouseDetailResolver } from "./_resolves/house-detail.resolver";
+import { HouseListResolver } from "./_resolves/houses-list.resolver";
+
+export function tokenGetter() {
+  return localStorage.getItem("token");
+}
 
 @NgModule({
   declarations: [
@@ -25,16 +45,36 @@ import { AuthGuard } from "./_guards/auth.guard";
     HomeComponent,
     HousesListComponent,
     ContactComponent,
-    MyOfferComponent
+    MyOffersComponent,
+    NewOfferComponent,
+    HouseComponent,
+    HouseDetailComponent
   ],
   imports: [
     BrowserModule,
+    NgxImageGalleryModule,
     BsDropdownModule.forRoot(),
+    ModalModule.forRoot(),
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ["localhost:5000"],
+        blacklistedRoutes: ["localhost:5000/api/auth"]
+      }
+    })
   ],
-  providers: [AuthService, AlertifyService, AuthGuard],
+  providers: [
+    AuthService,
+    AlertifyService,
+    AuthGuard,
+    UserService,
+    HouseService,
+    HouseDetailResolver,
+    HouseListResolver
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

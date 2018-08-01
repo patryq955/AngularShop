@@ -31,6 +31,8 @@ namespace ShopApi.Migrations
 
                     b.Property<decimal>("Value");
 
+                    b.Property<int>("numberRooms");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -73,7 +75,7 @@ namespace ShopApi.Migrations
             modelBuilder.Entity("ShopApi.Models.House", b =>
                 {
                     b.HasOne("ShopApi.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Houses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

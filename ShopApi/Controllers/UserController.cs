@@ -16,11 +16,9 @@ namespace ShopApi.Controllers
     [ValidateModel]
     public class UserController : BaseController
     {
-        private IMapper _mapper;
 
-        public UserController(IGenericUnitOfWork uow, IMapper mapper) : base(uow)
+        public UserController(IGenericUnitOfWork uow, IMapper mapper) : base(uow, mapper)
         {
-            _mapper = mapper;
         }
 
         [HttpGet("getUsers")]
@@ -28,7 +26,7 @@ namespace ShopApi.Controllers
         {
             var users = await _uow.Repository<User>().Get();
 
-            var usersToReturn = _mapper.Map<IEnumerable<UserDetailedDto>>(users);
+            var usersToReturn = _mapper.Map<IEnumerable<UserDetailDto>>(users);
 
             return Json(usersToReturn);
         }
@@ -36,9 +34,9 @@ namespace ShopApi.Controllers
         [HttpGet("user")]
         public async Task<IActionResult> GetUserId(int id)
         {
-            var user = await _uow.Repository<User>().GetByID(id);
+            var user = await _uow.Repository<User>().GetByID(x => x.Id == id);
 
-            var userToReturn = _mapper.Map<UserDetailedDto>(user);
+            var userToReturn = _mapper.Map<UserDetailDto>(user);
 
             return Json(userToReturn);
         }

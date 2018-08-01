@@ -1,9 +1,13 @@
-import { AlertifyService } from '../_services/alertify.service';
+import { AlertifyService } from "../_services/alertify.service";
 import { Observable } from "rxjs/Observable";
 import { AuthService } from "../_services/auth.service";
 import { FormGroup, FormControl } from "@angular/forms/src/model";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, TemplateRef } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import {
+  BsModalRef,
+  BsModalService
+} from "ngx-bootstrap/modal";
 
 @Component({
   selector: "app-nav",
@@ -12,7 +16,14 @@ import { NgForm } from "@angular/forms";
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  constructor(public authService: AuthService,private alertifyService: AlertifyService) {}
+  modalRef: BsModalRef;
+  registerMode = false;
+
+  constructor(
+    public authService: AuthService,
+    private alertifyService: AlertifyService,
+    private modalService: BsModalService
+  ) {}
 
   ngOnInit() {}
 
@@ -36,5 +47,19 @@ export class NavComponent implements OnInit {
 
   loggedIn(): boolean {
     return this.authService.loggedIn();
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(
+      template,
+      Object.assign({}, { class: "modalRegister" })
+    );
+  }
+
+  cancelRegister(registerMode: boolean) {
+    if (registerMode) {
+      this.modalRef.hide();
+      this.modalRef = null;
+    }
   }
 }

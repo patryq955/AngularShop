@@ -11,8 +11,8 @@ using System;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20180730190731_ExtendedUserClass")]
-    partial class ExtendedUserClass
+    [Migration("20180731175727_InitialCreate3")]
+    partial class InitialCreate3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,26 @@ namespace ShopApi.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ShopApi.Models.House", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("City");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<decimal>("Value");
+
+                    b.Property<int>("numberRooms");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("House");
+                });
 
             modelBuilder.Entity("ShopApi.Models.User", b =>
                 {
@@ -51,6 +71,14 @@ namespace ShopApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ShopApi.Models.House", b =>
+                {
+                    b.HasOne("ShopApi.Models.User", "User")
+                        .WithMany("Houses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

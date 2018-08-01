@@ -6,37 +6,42 @@
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    
+
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" [routerLink]="['']" >Strona główna
+          <a class="nav-link" [routerLink]="['']">Strona główna
             <span class="sr-only"></span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/mieszkania']" >Mieszkania</a>
+          <a class="nav-link" [routerLink]="['/mieszkania']">Mieszkania</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/kontakt']">Kontakt</a>
         </li>
         <li class="nav-item">
-          <a *ngIf="loggedIn()" class="nav-link" [routerLink]="['moje-oferty']" routerLinkActive="active" >Moje oferty</a>
+          <a class="nav-link" *ngIf="loggedIn()" [routerLink]="['dodaj']" >Nowa oferta</a>
         </li>
       </ul>
       <form (ngSubmit)="login()" #loginForm="ngForm" *ngIf="!loggedIn()" class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="text" placeholder="Login" aria-label="Search" name="userName" required [(ngModel)]="model.userName">
         <input class="form-control mr-sm-2" type="password" placeholder="Hasło" aria-label="Search" required name="password" [(ngModel)]="model.password">
 
-        <button class="btn btn-outline-success my-2 my-sm-0" [disabled]="loginForm.invalid" type="submit">Sign in</button>
-      </form>
+        <button class="btn btn-outline-success my-2 my-sm-0" [disabled]="loginForm.invalid" type="submit">Zaloguj</button>
 
+      </form>
+      <div class="btn-register" *ngIf="!loggedIn()">
+          <button class="btn btn-outline-success" type="button" (click)="openModal(register)">Zarejestruj</button>
+      </div>
       <div *ngIf="loggedIn()" class="dropdown" dropdown>
         <a class="dropdown-toggle text-light" dropdownToggle>
           Witaj {{authService.decodedToken?.unique_name | titlecase }}!
         </a>
         <div class="dropdown-menu" *dropdownMenu>
           <a class="dropdown-item" href="#">Zarządzanie</a>
+          <a class="dropdown-item" [routerLink]="['moje-oferty']">Moje oferty</a>
+
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#" (click)="logout()">Wyloguj</a>
         </div>
@@ -44,7 +49,8 @@
     </div>
   </div>
 </nav>
+<pre></pre>
 
-<pre>
-  
-</pre>
+<ng-template #register>
+    <app-register (cancelRegisterEvent)="cancelRegister($event)"></app-register>
+  </ng-template>

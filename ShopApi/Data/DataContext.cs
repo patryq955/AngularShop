@@ -10,8 +10,14 @@ namespace ShopApi.Data
         {
         }
 
-        public DbSet<User> Users {get;set;}
-        public DbSet<House> House {get;set;}
+        public DbSet<User> Users { get; set; }
+        public DbSet<House> House { get; set; }
 
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.Entity<House>()
+        //         .HasOne(p => p.User)
+        //         .WithMany(b => b.Houses);
+        // }
     }
 }

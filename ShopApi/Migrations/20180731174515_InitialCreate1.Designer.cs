@@ -11,8 +11,8 @@ using System;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20180730192944_AddHouseClassEdit")]
-    partial class AddHouseClassEdit
+    [Migration("20180731174515_InitialCreate1")]
+    partial class InitialCreate1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,8 @@ namespace ShopApi.Migrations
                     b.Property<int>("UserId");
 
                     b.Property<decimal>("Value");
+
+                    b.Property<int>("numberRooms");
 
                     b.HasKey("Id");
 
@@ -74,7 +76,7 @@ namespace ShopApi.Migrations
             modelBuilder.Entity("ShopApi.Models.House", b =>
                 {
                     b.HasOne("ShopApi.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Student")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
