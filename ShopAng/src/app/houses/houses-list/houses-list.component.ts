@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AlertifyService } from "../../_services/alertify.service";
 import { House } from "../../_models/house";
 import { HouseService } from "../../_services/house.service";
-import { ActivatedRoute } from "../../../../node_modules/@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-houses-list",

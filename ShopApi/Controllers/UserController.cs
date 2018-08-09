@@ -8,10 +8,12 @@ using ShopApi.Models;
 using AutoMapper;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System;
 
 namespace ShopApi.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ValidateModel]
     public class UserController : BaseController
@@ -31,7 +33,7 @@ namespace ShopApi.Controllers
             return Json(usersToReturn);
         }
 
-        [HttpGet("user")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserId(int id)
         {
             var user = await _uow.Repository<User>().GetByID(x => x.Id == id);
@@ -39,6 +41,23 @@ namespace ShopApi.Controllers
             var userToReturn = _mapper.Map<UserDetailDto>(user);
 
             return Json(userToReturn);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForUpdateDto userForUpdateDto)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
+
+            var userFromRepo = await _uow.Repository<User>().GetByID(x => x.Id == id);
+            _mapper.Map(userForUpdateDto, userFromRepo);
+
+            if (await _uow.SaveChanges())
+                return NoContent();
+
+            throw new Exception($"Zmiana danych użytkownika {userFromRepo.UserName} nie powiodła się");
         }
     }
 }

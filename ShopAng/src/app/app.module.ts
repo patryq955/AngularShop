@@ -10,12 +10,14 @@ import { NgxImageGalleryModule } from 'ngx-image-gallery';
 //Component
 import { AppComponent } from "./app.component";
 import { NavComponent } from "./nav/nav.component";
-import { RegisterComponent } from "./register/register.component";
+import { RegisterComponent } from "./members/register/register.component";
 import { HomeComponent } from "./home/home.component";
 import { HousesListComponent } from "./houses/houses-list/houses-list.component";
 import { ContactComponent } from "./contact/contact.component";
-import { MyOffersComponent } from "./my-offers/my-offers.component";
+import { MyOffersComponent } from "./houses/my-offers/my-offers.component";
 import { HouseDetailComponent } from "./houses/house-detail/house-detail.component";
+import { NewOfferComponent } from "./houses/new-offer/new-offer.component";
+import { MemberEditComponent } from "./members/member-edit/member-edit.component";
 
 
 //Services
@@ -27,11 +29,13 @@ import { HouseService } from "./_services/house.service";
 //Bootstrap
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ModalModule } from "ngx-bootstrap/modal";
-import { NewOfferComponent } from "./new-offer/new-offer.component";
 import { HouseComponent } from "./houses/house/house.component";
 import { JwtModule } from "@auth0/angular-jwt";
 import { HouseDetailResolver } from "./_resolves/house-detail.resolver";
 import { HouseListResolver } from "./_resolves/houses-list.resolver";
+import { MemberEditResolver } from "./_resolves/member-edit.resolver";
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { PreventUnsavedChanges } from "./_guards/prevent-unsaved-changes.guard";
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -48,13 +52,15 @@ export function tokenGetter() {
     MyOffersComponent,
     NewOfferComponent,
     HouseComponent,
-    HouseDetailComponent
+    HouseDetailComponent,
+    MemberEditComponent,
   ],
   imports: [
     BrowserModule,
     NgxImageGalleryModule,
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
+    TabsModule.forRoot(),
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
@@ -73,7 +79,9 @@ export function tokenGetter() {
     UserService,
     HouseService,
     HouseDetailResolver,
-    HouseListResolver
+    HouseListResolver,
+    MemberEditResolver,
+    PreventUnsavedChanges
   ],
   bootstrap: [AppComponent]
 })

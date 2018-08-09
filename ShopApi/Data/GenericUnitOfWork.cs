@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopApi.Data
 {
     public interface IGenericUnitOfWork
     {
         IRepository<T> Repository<T>() where T : class;
+        Task<bool> SaveChanges();
     }
     public class GenericUnitOfWork : IDisposable, IGenericUnitOfWork
     {
@@ -28,9 +30,9 @@ namespace ShopApi.Data
             _repositories.Add(typeof(T), repo);
             return repo;
         }
-        public void SaveChanges()
+        public async Task<bool> SaveChanges()
         {
-            _db.SaveChanges();
+            return await _db.SaveChangesAsync() > 0;
         }
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)

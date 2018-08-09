@@ -28,6 +28,8 @@ namespace ShopApi.Helpers
                 opt.MapFrom(src => src.User.UserName);
             });
 
+            CreateMap<UserForUpdateDto,User>();
+
         }
     }
 }
