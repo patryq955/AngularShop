@@ -14,8 +14,7 @@ using ShopApi.Models;
 namespace ShopApi.Controllers
 {
     [Route("api/[controller]")]
-    [ValidateModel]
-    // [Authorize]
+    [ApiController]
     public class HouseController : BaseController
     {
         DataContext _db;
@@ -27,7 +26,7 @@ namespace ShopApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHouse(int id)
         {
-            var house = await _uow.Repository<House>().GetByID(x=> x.Id == id, x => x.User);
+            var house = await _uow.Repository<House>().GetByIDAsync(x=> x.Id == id, x => x.User);
 
             var houseToReturn = _mapper.Map<HouseDetailDto>(house);
             return Json(houseToReturn);

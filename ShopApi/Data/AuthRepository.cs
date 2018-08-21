@@ -15,14 +15,14 @@ namespace ShopApi.Data
     }
     public class AuthRepository : IAuthRepository
     {
-        private DataContext _context;
-        public AuthRepository(DataContext context)
+        protected IGenericUnitOfWork _uow;
+        public AuthRepository(IGenericUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
         public async Task<User> Login(string userName, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+            var user = await _uow.Repository<User>().GetByIDAsync(x => x.UserName == userName, x => x.Photos);
 
             if (user == null)
             {
@@ -60,9 +60,9 @@ namespace ShopApi.Data
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            await _uow.Repository<User>().InsertAsync(user);
 
+            await _uow.SaveChangesAsync();
             return user;
         }
 
@@ -75,7 +75,10 @@ namespace ShopApi.Data
             }
         }
 
-        public async Task<bool> UserExists(string userName) => await _context.Users.CountAsync(x => x.UserName == userName) > 0;
-
+        public async Task<bool> UserExists(string userName)
+        {
+            var users = await _uow.Repository<User>().Get(x => x.UserName == userName);
+            return users.ToList().Count() > 0;
+        }
     }
 }

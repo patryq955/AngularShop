@@ -28,7 +28,7 @@
       "request": "launch",
       "preLaunchTask": "build",
       "program":
-        "${workspaceFolder}/ShopApi/bin/Debug/netcoreapp2.0/ShopApi.dll",
+        "${workspaceFolder}/ShopApi/bin/Debug/netcoreapp2.1/ShopApi.dll",
       "args": [],
       "cwd": "${workspaceFolder}/ShopApi",
       "stopAtEntry": false,

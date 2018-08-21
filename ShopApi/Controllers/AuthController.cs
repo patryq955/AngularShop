@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -14,12 +15,14 @@ using ShopApi.Models;
 namespace ShopApi.Controllers
 {
     [Route("api/[controller]")]
-    [ValidateModel]
-    public class AuthController : Controller
+    [ApiController]
+    public class AuthController : BaseController
     {
         private readonly IConfiguration _config;
         private readonly IAuthRepository _authRepo;
-        public AuthController(IAuthRepository authRepo, IConfiguration config)
+
+        public AuthController(IGenericUnitOfWork uow, IMapper mapper,
+                            IAuthRepository authRepo, IConfiguration config) : base(uow, mapper)
         {
             _config = config;
             _authRepo = authRepo;
@@ -49,9 +52,9 @@ namespace ShopApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
         {
-            var user = await _authRepo.Login(userForLoginDto.UserName.ToLower(), userForLoginDto.Password);
+            var userFromRepo = await _authRepo.Login(userForLoginDto.UserName.ToLower(), userForLoginDto.Password);
 
-            if (user == null)
+            if (userFromRepo == null)
             {
                 return Unauthorized();
             }
@@ -62,8 +65,8 @@ namespace ShopApi.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]{
-                    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                    new Claim(ClaimTypes.Name ,user.UserName)
+                    new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()),
+                    new Claim(ClaimTypes.Name ,userFromRepo.UserName)
                 }),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
@@ -72,7 +75,13 @@ namespace ShopApi.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new { tokenString });
+            var user = _mapper.Map<UserForListDto>(userFromRepo);
+
+            return Ok(new
+            {
+                tokenString,
+                user
+            });
         }
     }
 }

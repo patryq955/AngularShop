@@ -21,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using ShopApi.Data;
 using ShopApi.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ShopApi
 {
@@ -36,21 +37,32 @@ namespace ShopApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+     
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<RequestLocalizationOptions>(options =>
-{
-    options.DefaultRequestCulture = new RequestCulture("pl-PL");
-});
+            {
+                options.DefaultRequestCulture = new RequestCulture("pl-PL");
+            });
             services.AddMvc().AddJsonOptions(
                 opt =>
                 {
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 }
-            );
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);;
             services.AddCors();
+
+            //Depedency Injection
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IGenericUnitOfWork, GenericUnitOfWork>();
+
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>
@@ -87,10 +99,14 @@ namespace ShopApi
                         }
                     })
                 );
+                app.UseHsts();
             }
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthentication();
+            app.UseHttpsRedirection();
+            app.UseCookiePolicy();
             app.UseMvc();
+        
         }
     }
 }

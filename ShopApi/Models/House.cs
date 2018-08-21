@@ -10,6 +10,7 @@ namespace ShopApi.Models
 
         public string City { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Value { get; set; }
 
         public int UserId { get; set; }
@@ -18,5 +19,6 @@ namespace ShopApi.Models
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
     }
 }

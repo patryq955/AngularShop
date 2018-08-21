@@ -8,7 +8,7 @@ namespace ShopApi.Data
     public interface IGenericUnitOfWork
     {
         IRepository<T> Repository<T>() where T : class;
-        Task<bool> SaveChanges();
+        Task<bool> SaveChangesAsync();
     }
     public class GenericUnitOfWork : IDisposable, IGenericUnitOfWork
     {
@@ -30,7 +30,7 @@ namespace ShopApi.Data
             _repositories.Add(typeof(T), repo);
             return repo;
         }
-        public async Task<bool> SaveChanges()
+        public async Task<bool> SaveChangesAsync()
         {
             return await _db.SaveChangesAsync() > 0;
         }

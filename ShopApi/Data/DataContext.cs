@@ -12,6 +12,10 @@ namespace ShopApi.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<House> House { get; set; }
+        public DbSet<Photo> Photo {get;set;}
+
+        public DbSet<SystemVariable> SystemVariable {get;set;}
+
 
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
         // {

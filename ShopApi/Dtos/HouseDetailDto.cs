@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ShopApi.Dtos
 {
     public class HouseDetailDto
@@ -6,6 +8,7 @@ namespace ShopApi.Dtos
 
         public string City { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Value { get; set; }
 
         public string UserName { get; set; }

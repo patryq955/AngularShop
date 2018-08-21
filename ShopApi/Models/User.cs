@@ -30,6 +30,9 @@ namespace ShopApi.Models
 
         public string Url { get; set; }
 
-        public ICollection<House> Houses {get;set;}
-    }
+        public ICollection<House> Houses { get; set; }
+
+        public ICollection<Photo> Photos { get; set; }
+        
+}
 }

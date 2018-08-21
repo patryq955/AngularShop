@@ -15,7 +15,7 @@ namespace ShopApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    [ValidateModel]
+    [ApiController]
     public class UserController : BaseController
     {
 
@@ -36,7 +36,7 @@ namespace ShopApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserId(int id)
         {
-            var user = await _uow.Repository<User>().GetByID(x => x.Id == id);
+            var user = await _uow.Repository<User>().GetByIDAsync(x => x.Id == id, x=> x.Photos);
 
             var userToReturn = _mapper.Map<UserDetailDto>(user);
 
@@ -51,10 +51,10 @@ namespace ShopApi.Controllers
                 return Unauthorized();
             }
 
-            var userFromRepo = await _uow.Repository<User>().GetByID(x => x.Id == id);
+            var userFromRepo = await _uow.Repository<User>().GetByIDAsync(x => x.Id == id);
             _mapper.Map(userForUpdateDto, userFromRepo);
 
-            if (await _uow.SaveChanges())
+            if (await _uow.SaveChangesAsync())
                 return NoContent();
 
             throw new Exception($"Zmiana danych użytkownika {userFromRepo.UserName} nie powiodła się");

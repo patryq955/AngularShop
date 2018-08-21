@@ -35,6 +35,9 @@
         <button class="btn btn-outline-success" type="button" (click)="openModal(register)">Zarejestruj</button>
       </div>
       <div *ngIf="loggedIn()" class="dropdown" dropdown>
+        <span>
+          <img src="{{photoUrl}}" alt="">
+        </span>
         <a class="dropdown-toggle text-light" dropdownToggle>
           Witaj {{authService.decodedToken?.unique_name | titlecase }}!
         </a>

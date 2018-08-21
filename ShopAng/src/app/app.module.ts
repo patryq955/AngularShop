@@ -5,7 +5,9 @@ import { RouterModule } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { AuthGuard } from "./_guards/auth.guard";
 import { appRoutes } from "./routes";
-import { NgxImageGalleryModule } from 'ngx-image-gallery';
+import { NgxImageGalleryModule } from "ngx-image-gallery";
+import { FileUploadModule } from "../../node_modules/ng2-file-upload";
+
 
 //Component
 import { AppComponent } from "./app.component";
@@ -18,7 +20,7 @@ import { MyOffersComponent } from "./houses/my-offers/my-offers.component";
 import { HouseDetailComponent } from "./houses/house-detail/house-detail.component";
 import { NewOfferComponent } from "./houses/new-offer/new-offer.component";
 import { MemberEditComponent } from "./members/member-edit/member-edit.component";
-
+import { PhotoEditorComponent } from "./members/photo-editor/photo-editor.component";
 
 //Services
 import { AlertifyService } from "./_services/alertify.service";
@@ -34,7 +36,7 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { HouseDetailResolver } from "./_resolves/house-detail.resolver";
 import { HouseListResolver } from "./_resolves/houses-list.resolver";
 import { MemberEditResolver } from "./_resolves/member-edit.resolver";
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TabsModule } from "ngx-bootstrap/tabs";
 import { PreventUnsavedChanges } from "./_guards/prevent-unsaved-changes.guard";
 
 export function tokenGetter() {
@@ -54,6 +56,7 @@ export function tokenGetter() {
     HouseComponent,
     HouseDetailComponent,
     MemberEditComponent,
+    PhotoEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,8 @@ export function tokenGetter() {
         whitelistedDomains: ["localhost:5000"],
         blacklistedRoutes: ["localhost:5000/api/auth"]
       }
-    })
+    }),
+    FileUploadModule
   ],
   providers: [
     AuthService,

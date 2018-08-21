@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using ShopApi.Dtos;
 using ShopApi.Models;
@@ -12,11 +13,19 @@ namespace ShopApi.Helpers
             ForMember(dest => dest.Age, opt =>
             {
                 opt.ResolveUsing(d => d.DateOfBirth.CalculateAge());
+                
             }).
             ForMember(dest => dest.UrlPhoto, opt =>
             {
-                opt.MapFrom(src => src.Url);
+                opt.MapFrom(src => src.Photos.FirstOrDefault(x=>x.IsMain == true).Url);
             });
+
+            CreateMap<User,UserForListDto>().
+            ForMember(dest => dest.UrlPhoto, opt =>
+            {
+                opt.MapFrom(src => src.Photos.FirstOrDefault(x=>x.IsMain == true).Url);
+            });
+
 
             CreateMap<House,HouseForListDto>().
             ForMember(dest => dest.UserName,opt =>{
@@ -29,6 +38,11 @@ namespace ShopApi.Helpers
             });
 
             CreateMap<UserForUpdateDto,User>();
+            CreateMap<PhotoForCreationDto,Photo>();
+            CreateMap<Photo,PhotoforDetailDto>();
+            CreateMap<Photo,PhotoForReturnDto>();
+            CreateMap<PhotoForReturnDto,Photo>();
+
 
         }
     }

@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-4">
             <div class="card">
-                <img src="*">
+                <img src="{{photoUrl}}" height="200px">
                 <div clas="card-body">
                     <div>
                         <strong>Miejoscowosc</strong>
@@ -53,8 +53,9 @@
                             </div>
                         </form>
                     </tab>
-                    <tab heading="Zdjęcie">
-
+                    <tab heading="Zdjęcia">
+                        <app-photo-editor [photos]="user.photos" 
+                        (getMemberPhotoChange)="memberChange($event)" ></app-photo-editor>
                     </tab>
                 </tabset>
             </div>

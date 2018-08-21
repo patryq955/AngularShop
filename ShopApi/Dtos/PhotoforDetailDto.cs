@@ -1,11 +1,9 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace ShopApi.Models
+namespace ShopApi.Dtos
 {
-    public class Photo
+    public class PhotoforDetailDto
     {
-        [Key]
         public int Id { get; set; }
 
         public string Url { get; set; }
@@ -17,9 +15,6 @@ namespace ShopApi.Models
         public string PublicId { get; set; }
 
         public bool IsMain { get; set; }
-
-        public User User { get; set; }
-
-        public int UserId { get; set; }
+        
     }
 }

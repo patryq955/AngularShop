@@ -4,28 +4,32 @@ import { AuthService } from "../_services/auth.service";
 import { FormGroup, FormControl } from "@angular/forms/src/model";
 import { Component, OnInit, TemplateRef } from "@angular/core";
 import { NgForm } from "@angular/forms";
-import {
-  BsModalRef,
-  BsModalService
-} from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { Router } from "../../../node_modules/@angular/router";
 
 @Component({
   selector: "app-nav",
   templateUrl: "./nav.component.html",
-  styleUrls: ["./nav.component.css"]
+  styleUrls: ["./nav.component.scss"]
 })
 export class NavComponent implements OnInit {
   model: any = {};
   modalRef: BsModalRef;
   registerMode = false;
+  photoUrl: string;
 
   constructor(
     public authService: AuthService,
     private alertifyService: AlertifyService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.currentPhoto.subscribe(
+      photoUrl => (this.photoUrl = photoUrl)
+    );
+  }
 
   login() {
     this.authService.login(this.model).subscribe(
@@ -36,13 +40,18 @@ export class NavComponent implements OnInit {
         this.alertifyService.error(error);
       }
     );
+    console.log(this.authService.currentUser);
   }
 
   logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    this.authService.decodedToken = null;
+    this.authService.currentUser = null;
     this.alertifyService.message("Wylogowano");
     this.model.password = "";
     this.model.userName = "";
+    this.router.navigate(["/home"]);
   }
 
   loggedIn(): boolean {

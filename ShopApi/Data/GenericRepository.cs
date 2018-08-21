@@ -9,13 +9,18 @@ namespace ShopApi.Data
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetByID(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
+        Task<TEntity> GetByIDAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
+
+        TEntity GetByID(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
         Task<IEnumerable<TEntity>> Get(
                    Expression<Func<TEntity, bool>> filter = null,
                    Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                    params Expression<Func<TEntity, object>>[] includes);
-        void Insert(TEntity entity);
+        Task InsertAsync(TEntity entity);
         void Delete(TEntity entity);
+
+        void Delete(object id);
+
 
         void Update(TEntity entityToUpdate);
     }
@@ -62,7 +67,7 @@ namespace ShopApi.Data
                 return result;
             }
         }
-        public async Task<TEntity> GetByID(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<TEntity> GetByIDAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -80,9 +85,27 @@ namespace ShopApi.Data
             return tmp;
         }
 
-        public virtual void Insert(TEntity entity)
+        public TEntity GetByID(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
-            dbSet.Add(entity);
+            IQueryable<TEntity> query = dbSet;
+
+            query = query.Where(predicate);
+
+            if (includes.Any())
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            var tmp = query.First();
+            return tmp;
+        }
+
+        public virtual async Task InsertAsync(TEntity entity)
+        {
+            await dbSet.AddAsync(entity);
         }
 
         public virtual void Delete(object id)
