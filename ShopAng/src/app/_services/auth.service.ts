@@ -27,6 +27,8 @@ export class AuthService {
   }
 
   login(model: any) {
+    console.log(this.baseUrl);
+
     return this.http
       .post<string>(this.baseUrl + "login", model, this.getHeaders())
       .pipe(
@@ -44,9 +46,9 @@ export class AuthService {
       .catch(this.handleError);
   }
 
-  register(model: any) {
+  register(user: User) {
     return this.http
-      .post(this.baseUrl + "register", model, this.getHeaders())
+      .post(this.baseUrl + "register", user, this.getHeaders())
       .catch(this.handleError);
   }
 
@@ -59,7 +61,8 @@ export class AuthService {
   private getHeaders() {
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
       })
     };
     return httpOptions;

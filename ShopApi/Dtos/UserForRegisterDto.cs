@@ -1,15 +1,40 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ShopApi.Dtos
 {
     public class UserForRegisterDto
     {
-        [Required(ErrorMessage="Nazwa użytkownika jest wymagana")]
+        [Required]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage="Hasło jest wymagane")]
-        [StringLength(40,MinimumLength=4,ErrorMessage="Hasło jest za krótkie")  ]
-        
+        [Required]
+        [StringLength(40, MinimumLength = 4)]
+
         public string Password { get; set; }
+
+        [Required]
+        [CompareAttribute("Password", ErrorMessage = "Emails mismatch")]
+        public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string KnownAs { get; set; }
+
+        [Required]
+        public DateTime DateOfBirth { get; set; }
+
+        [Required]
+        public string City { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public DateTime LastActice { get; set; }
+
+        public UserForRegisterDto()
+        {
+            Created = DateTime.Now;
+            LastActice = DateTime.Now;
+
+        }
     }
 }

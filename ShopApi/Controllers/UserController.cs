@@ -33,7 +33,7 @@ namespace ShopApi.Controllers
             return Json(usersToReturn);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetUserId")]
         public async Task<IActionResult> GetUserId(int id)
         {
             var user = await _uow.Repository<User>().GetByIDAsync(x => x.Id == id, x=> x.Photos);

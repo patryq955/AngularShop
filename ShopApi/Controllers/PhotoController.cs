@@ -87,7 +87,7 @@ namespace ShopApi.Controllers
                 photo.IsMain = true;
             }
 
-            _uow.Repository<Photo>().InsertAsync(photo);
+            await _uow.Repository<Photo>().InsertAsync(photo);
 
             if (await _uow.SaveChangesAsync())
             {

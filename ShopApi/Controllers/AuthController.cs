@@ -39,15 +39,16 @@ namespace ShopApi.Controllers
                 ModelState.AddModelError("UserName", "User exists");
             }
 
-            var newUser = new User
-            {
-                UserName = userForRegisterDto.UserName
-            };
+            var newUserRepo = _mapper.Map<User>(userForRegisterDto);
 
-            var createUser = await _authRepo.Register(newUser, userForRegisterDto.Password);
+            var createUser = await _authRepo.Register(newUserRepo, userForRegisterDto.Password);
 
-            return StatusCode(201);
+            var usertToReturn = _mapper.Map<UserForListDto>(createUser);
+
+            return CreatedAtRoute("GetUserId", new { Controller = "Users", id = createUser.Id },usertToReturn);
         }
+
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)

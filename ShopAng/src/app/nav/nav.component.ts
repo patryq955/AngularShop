@@ -37,7 +37,8 @@ export class NavComponent implements OnInit {
         this.alertifyService.succes("Logowanie pomyślne");
       },
       error => {
-        this.alertifyService.error(error);
+        this.alertifyService.error(error.error);
+        console.log(error);
       }
     );
     console.log(this.authService.currentUser);

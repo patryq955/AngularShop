@@ -5,16 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Chrome against localhost, with sourcemaps",
       "type": "chrome",
       "request": "launch",
+      "name": "Launch Chrome",
       "url": "http://localhost:4200",
-      "sourceMaps": true,
-      "webRoot": "${workspaceRoot}/ShopAng",
+      "webRoot": "${workspaceFolder}/ShopAng"
+    },
+    {
+      "name": "chroome",
 
-      "sourceMapPathOverrides": {
-        "webpack:///./*": "${workspaceRoot}/*"
-      }
+      "version": "0.2.0",
+      "configurations": [
+        {
+          "type": "chrome",
+          "request": "launch",
+          "name": "Launch Chrome against localhost",
+          "url": "http://localhost:4200",
+          "webRoot": "${workspaceFolder}/ShopAng"
+        }
+      ]
     },
     {
       "name": ".NET Core Attach",
@@ -27,8 +36,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program":
-        "${workspaceFolder}/ShopApi/bin/Debug/netcoreapp2.1/ShopApi.dll",
+      "program": "${workspaceFolder}/ShopApi/bin/Debug/netcoreapp2.1/ShopApi.dll",
       "args": [],
       "cwd": "${workspaceFolder}/ShopApi",
       "stopAtEntry": false,

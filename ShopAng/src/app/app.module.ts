@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthGuard } from "./_guards/auth.guard";
 import { appRoutes } from "./routes";
 import { NgxImageGalleryModule } from "ngx-image-gallery";
@@ -30,6 +30,7 @@ import { HouseService } from "./_services/house.service";
 
 //Bootstrap
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from "ngx-bootstrap/modal";
 import { HouseComponent } from "./houses/house/house.component";
 import { JwtModule } from "@auth0/angular-jwt";
@@ -62,7 +63,9 @@ export function tokenGetter() {
     BrowserModule,
     NgxImageGalleryModule,
     BsDropdownModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     ModalModule.forRoot(),
+    ReactiveFormsModule,
     TabsModule.forRoot(),
     FormsModule,
     HttpClientModule,
