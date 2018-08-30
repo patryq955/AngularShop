@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { User } from "../../_models/user";
-import { ActivatedRoute } from "../../../../node_modules/@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { AlertifyService } from "../../_services/alertify.service";
-import { NgForm } from "../../../../node_modules/@angular/forms";
+import { NgForm } from "@angular/forms";
 import { UserService } from "../../_services/user.service";
 import { AuthService } from "../../_services/auth.service";
 

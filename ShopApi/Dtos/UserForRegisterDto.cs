@@ -28,13 +28,12 @@ namespace ShopApi.Dtos
 
         public DateTime Created { get; set; }
 
-        public DateTime LastActice { get; set; }
+        public DateTime LastActive { get; set; }
 
         public UserForRegisterDto()
         {
             Created = DateTime.Now;
-            LastActice = DateTime.Now;
-
+            LastActive = DateTime.Now;
         }
     }
 }

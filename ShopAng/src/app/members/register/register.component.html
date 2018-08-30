@@ -44,9 +44,9 @@
       <div class="invalid-feedback" *ngIf="registerForm.get('knownAs').touched && registerForm.get('knownAs').hasError('required')">Opis jest wymagany</div>
     </div>
     <div class="form-group">
-      <input [ngClass]="{'is-invalid': registerForm.get('birth').errors && registerForm.get('birth').touched}" class="form-control"
-        placeholder="Data Urodzenia" formControlName="birth" type="text" bsDatepicker [maxDate]="maxDate">
-      <div class="invalid-feedback" *ngIf="registerForm.get('birth').touched && registerForm.get('birth').hasError('required')">Data urodzenia jest wymagana</div>
+      <input [ngClass]="{'is-invalid': registerForm.get('dateOfBirth').errors && registerForm.get('dateOfBirth').touched}" class="form-control"
+        placeholder="Data Urodzenia" formControlName="dateOfBirth" type="text" bsDatepicker [maxDate]="maxDate">
+      <div class="invalid-feedback" *ngIf="registerForm.get('dateOfBirth').touched && registerForm.get('dateOfBirth').hasError('required')">Data urodzenia jest wymagana</div>
     </div>
     <div class="form-group">
       <input [ngClass]="{'is-invalid': registerForm.get('city').errors && registerForm.get('city').touched}" class="form-control"

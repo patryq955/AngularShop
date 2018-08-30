@@ -77,7 +77,7 @@ namespace ShopApi.Data
 
         public async Task<bool> UserExists(string userName)
         {
-            var users = await _uow.Repository<User>().Get(x => x.UserName == userName);
+            var users = await _uow.Repository<User>().GetListAsync(x => x.UserName == userName);
             return users.ToList().Count() > 0;
         }
     }

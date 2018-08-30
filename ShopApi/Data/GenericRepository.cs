@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ShopApi.Helpers;
 
 namespace ShopApi.Data
 {
@@ -12,10 +13,16 @@ namespace ShopApi.Data
         Task<TEntity> GetByIDAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
 
         TEntity GetByID(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
-        Task<IEnumerable<TEntity>> Get(
+        Task<IEnumerable<TEntity>> GetListAsync(
                    Expression<Func<TEntity, bool>> filter = null,
                    Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                    params Expression<Func<TEntity, object>>[] includes);
+
+        Task<PagedList<TEntity>> GetPagedListAsync(
+                    TParams tParams,
+                    Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy,
+                    Expression<Func<TEntity, bool>> filter = null,
+                    params Expression<Func<TEntity, object>>[] includes);
         Task InsertAsync(TEntity entity);
         void Delete(TEntity entity);
 
@@ -36,7 +43,7 @@ namespace ShopApi.Data
             this.dbSet = db.Set<TEntity>();
         }
 
-        public async virtual Task<IEnumerable<TEntity>> Get(
+        public async virtual Task<IEnumerable<TEntity>> GetListAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes)
@@ -67,6 +74,33 @@ namespace ShopApi.Data
                 return result;
             }
         }
+
+        public async Task<PagedList<TEntity>> GetPagedListAsync(
+            TParams tParams,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy,
+            Expression<Func<TEntity, bool>> filter = null,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (includes.Any())
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            query = orderBy(query).AsQueryable();
+            
+            return await PagedList<TEntity>.CreateAsync(query, tParams.PageNumber, tParams.PageSize);
+        }
+
         public async Task<TEntity> GetByIDAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
@@ -127,5 +161,7 @@ namespace ShopApi.Data
             dbSet.Attach(entityToUpdate);
             _db.Entry(entityToUpdate).State = EntityState.Modified;
         }
+
+
     }
 }

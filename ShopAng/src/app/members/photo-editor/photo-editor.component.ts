@@ -5,7 +5,7 @@ import { environment } from "../../../environments/environment";
 import { AuthService } from "../../_services/auth.service";
 import { UserService } from "../../_services/user.service";
 import { AlertifyService } from "../../_services/alertify.service";
-import { JsonpCallbackContext } from "../../../../node_modules/@angular/common/http/src/jsonp";
+import { JsonpCallbackContext } from "@angular/common/http/src/jsonp";
 
 @Component({
   selector: "app-photo-editor",

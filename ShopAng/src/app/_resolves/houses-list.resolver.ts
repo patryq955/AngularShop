@@ -13,6 +13,9 @@ import { of } from "rxjs/observable/of";
 
 @Injectable()
 export class HouseListResolver implements Resolve<House[]> {
+  pageNumber=1;
+  pageSize = 5;
+  
   constructor(
     private houseService: HouseService,
     private alertify: AlertifyService,
@@ -20,7 +23,7 @@ export class HouseListResolver implements Resolve<House[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<House[]> {
-    return this.houseService.getHouses().pipe(
+    return this.houseService.getHouses(this.pageNumber,this.pageSize).pipe(
         catchError(error =>{
             this.alertify.error("Problem z danymi");
             this.router.navigate(['/kontakt']);

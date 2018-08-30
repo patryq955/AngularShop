@@ -10,12 +10,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System;
+using ShopApi.Helpers;
 
 namespace ShopApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [ServiceFilter(typeof(LogUserActivity))]
     public class UserController : BaseController
     {
 
@@ -26,7 +28,7 @@ namespace ShopApi.Controllers
         [HttpGet("getUsers")]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _uow.Repository<User>().Get();
+            var users = await _uow.Repository<User>().GetListAsync();
 
             var usersToReturn = _mapper.Map<IEnumerable<UserDetailDto>>(users);
 

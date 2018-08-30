@@ -6,9 +6,9 @@ import {
   FormControl,
   Validators,
   FormBuilder
-} from "../../../../node_modules/@angular/forms";
+} from "@angular/forms";
 import { User } from "../../_models/user";
-import { Route, Router } from "../../../../node_modules/@angular/router";
+import { Route, Router } from "@angular/router";
 
 @Component({
   selector: "app-register",
@@ -44,11 +44,10 @@ export class RegisterComponent implements OnInit {
         username: ["", Validators.required],
         knownAs: ["", Validators.required],
         city: ["", Validators.required],
-        birth: ["", Validators.required],
+        dateOfBirth: ["", Validators.required],
         password: ["", [Validators.required, Validators.minLength(4)]],
         confirmPassword: ["", Validators.required]
-      }
-      ,
+      },
       {
         validator: this.checkPasswordConfirmValidation
       }
@@ -73,21 +72,12 @@ export class RegisterComponent implements OnInit {
         },
         () => {
           this.authService.login(this.user).subscribe(() => {
-    this.cancelRegisterEvent.emit(true);
+            this.cancelRegisterEvent.emit(true);
             this.route.navigate(["/mieszkania"]);
           });
         }
       );
     }
-    // this.authService.register(this.model).subscribe(
-    //   () => {
-    //     this.alertifyService.succes("Rejestracja zakonczona pomyślnie");
-    //   },
-    //   error => {
-    //     this.alertifyService.error(error);
-    //   }
-    // );
-    console.log(this.registerForm.value);
   }
 
   cancel() {

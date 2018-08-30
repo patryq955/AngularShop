@@ -1,5 +1,5 @@
-import { Injectable } from "../../../node_modules/@angular/core";
-import { CanDeactivate } from "../../../node_modules/@angular/router";
+import { Injectable } from "@angular/core";
+import { CanDeactivate } from "@angular/router";
 import { MemberEditComponent } from "../members/member-edit/member-edit.component";
 
 @Injectable()

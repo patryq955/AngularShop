@@ -118,7 +118,7 @@ namespace ShopApi.Controllers
                 return BadRequest("To zdjecie jest głównym zdjęciem");
             }
 
-            var photos = await _uow.Repository<Photo>().Get(x => x.UserId == userId);
+            var photos = await _uow.Repository<Photo>().GetListAsync(x => x.UserId == userId);
 
             photos.ToList().ForEach(x => x.IsMain = false);
 

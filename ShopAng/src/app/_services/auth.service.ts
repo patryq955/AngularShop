@@ -27,7 +27,6 @@ export class AuthService {
   }
 
   login(model: any) {
-    console.log(this.baseUrl);
 
     return this.http
       .post<string>(this.baseUrl + "login", model, this.getHeaders())

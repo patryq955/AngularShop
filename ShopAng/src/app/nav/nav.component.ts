@@ -5,7 +5,7 @@ import { FormGroup, FormControl } from "@angular/forms/src/model";
 import { Component, OnInit, TemplateRef } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { Router } from "../../../node_modules/@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-nav",
@@ -38,10 +38,8 @@ export class NavComponent implements OnInit {
       },
       error => {
         this.alertifyService.error(error.error);
-        console.log(error);
       }
     );
-    console.log(this.authService.currentUser);
   }
 
   logout() {

@@ -25,11 +25,11 @@
                     </div>
                     <div>
                         <strong>Last Active</strong>
-                        <p>{{user.lastActive}}</p>
+                        <p>{{user.lastActive | messageTime }}</p>
                     </div>
                     <div>
                         <strong>Utworzono</strong>
-                        <p>{{user.created}}</p>
+                        <p>{{user.created | date : 'dd-MM-yyyy'}}</p>
                     </div>
                     <div class="card-footer">
                         <button class="btn btn-succes btn-block" [disabled]="!editForm.dirty" form="editForm"> Zapisz zmiany</button>
@@ -54,8 +54,7 @@
                         </form>
                     </tab>
                     <tab heading="Zdjęcia">
-                        <app-photo-editor [photos]="user.photos" 
-                        (getMemberPhotoChange)="memberChange($event)" ></app-photo-editor>
+                        <app-photo-editor [photos]="user.photos" (getMemberPhotoChange)="memberChange($event)"></app-photo-editor>
                     </tab>
                 </tabset>
             </div>

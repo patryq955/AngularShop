@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthGuard } from "./_guards/auth.guard";
 import { appRoutes } from "./routes";
 import { NgxImageGalleryModule } from "ngx-image-gallery";
-import { FileUploadModule } from "../../node_modules/ng2-file-upload";
+import { FileUploadModule } from "ng2-file-upload";
 
 
 //Component
@@ -31,6 +31,7 @@ import { HouseService } from "./_services/house.service";
 //Bootstrap
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { ModalModule } from "ngx-bootstrap/modal";
 import { HouseComponent } from "./houses/house/house.component";
 import { JwtModule } from "@auth0/angular-jwt";
@@ -39,6 +40,8 @@ import { HouseListResolver } from "./_resolves/houses-list.resolver";
 import { MemberEditResolver } from "./_resolves/member-edit.resolver";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { PreventUnsavedChanges } from "./_guards/prevent-unsaved-changes.guard";
+import { MessageTimePipe } from "./_pipes/messageTimePipe";
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -57,14 +60,17 @@ export function tokenGetter() {
     HouseComponent,
     HouseDetailComponent,
     MemberEditComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    MessageTimePipe
   ],
   imports: [
     BrowserModule,
     NgxImageGalleryModule,
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot(),
     ModalModule.forRoot(),
+    ButtonsModule.forRoot(),
     ReactiveFormsModule,
     TabsModule.forRoot(),
     FormsModule,
