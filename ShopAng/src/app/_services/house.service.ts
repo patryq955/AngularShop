@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Observable } from "../../../node_modules/rxjs/Observable";
+import { Observable } from "../../../node_modules/rxjs";
 import { House } from "../_models/house";
 import { HouseDetail } from "../_models/houseDetail";
 import {  PaginatedResult } from "../_models/pagination";
@@ -33,8 +33,8 @@ export class HouseService {
       .get<House[]>(this.baseUrl + "getHouses", {
         observe: "response",
         params
-      })
-      .map(response => {
+      }).pipe(
+      map(response => {
         paginatedResult.result = response.body;
 
         if (response.headers.get("Pagination") != null) {
@@ -43,7 +43,7 @@ export class HouseService {
           );
         }
         return paginatedResult;
-      });
+      }));
   }
 
   getHouse(id): Observable<HouseDetail> {

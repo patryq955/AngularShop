@@ -1,9 +1,5 @@
-import { Observable } from "rxjs/Observable";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/catch";
-import "rxjs/add/observable/throw";
 import { BehaviorSubject } from "rxjs";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { map } from "rxjs/operators";
@@ -29,7 +25,7 @@ export class AuthService {
   login(model: any) {
 
     return this.http
-      .post<string>(this.baseUrl + "login", model, this.getHeaders())
+      .post<string>(this.baseUrl + "login", model)
       .pipe(
         map((response: any) => {
           const user = response;
@@ -41,14 +37,13 @@ export class AuthService {
             this.changeMemberPhoto(this.currentUser.urlPhoto);
           }
         })
-      )
-      .catch(this.handleError);
+      );
   }
 
   register(user: User) {
     return this.http
-      .post(this.baseUrl + "register", user, this.getHeaders())
-      .catch(this.handleError);
+      .post(this.baseUrl + "register", user);
+      
   }
 
   loggedIn() {
@@ -57,29 +52,29 @@ export class AuthService {
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  private getHeaders() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      })
-    };
-    return httpOptions;
-  }
+  // private getHeaders() {
+  //   const httpOptions = {
+  //     headers: new HttpHeaders({
+  //       "Content-Type": "application/json",
+  //       "Access-Control-Allow-Origin": "*"
+  //     })
+  //   };
+  //   return httpOptions;
+  // }
 
-  private handleError(error: any) {
-    const applicationError = error.headers.get("Application-Error");
-    if (applicationError) {
-      return Observable.throw(applicationError);
-    }
-    let modelStateError = "";
-    if (error.error) {
-      for (const key in error.error) {
-        if (error.error[key]) {
-          modelStateError += error.error[key] + ". \n";
-        }
-      }
-    }
-    return Observable.throw(modelStateError || "Błąd serwera");
-  }
+  // private handleError(error: any) {
+  //   const applicationError = error.headers.get("Application-Error");
+  //   if (applicationError) {
+  //     return Observable.throw(applicationError);
+  //   }
+  //   let modelStateError = "";
+  //   if (error.error) {
+  //     for (const key in error.error) {
+  //       if (error.error[key]) {
+  //         modelStateError += error.error[key] + ". \n";
+  //       }
+  //     }
+  //   }
+  //   return Observable.throw(modelStateError || "Błąd serwera");
+  // }
 }

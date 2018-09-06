@@ -1,9 +1,6 @@
 import { AlertifyService } from "../_services/alertify.service";
-import { Observable } from "rxjs/Observable";
 import { AuthService } from "../_services/auth.service";
-import { FormGroup, FormControl } from "@angular/forms/src/model";
 import { Component, OnInit, TemplateRef } from "@angular/core";
-import { NgForm } from "@angular/forms";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Router } from "@angular/router";
 

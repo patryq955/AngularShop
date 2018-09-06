@@ -1,4 +1,3 @@
-import { Observable } from "rxjs/Observable";
 import { AsyncPipe } from "../../../node_modules/@angular/common";
 import { Pipe, ChangeDetectorRef } from "../../../node_modules/@angular/core";
 

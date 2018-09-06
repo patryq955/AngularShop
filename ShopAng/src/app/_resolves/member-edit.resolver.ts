@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Resolve, Router, ActivatedRouteSnapshot } from "@angular/router";
 import { AlertifyService } from "../_services/alertify.service";
-import { Observable } from "rxjs/Observable";
+import { Observable,of } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { of } from "rxjs/observable/of";
 import { HouseDetail } from "../_models/houseDetail";
 import { User } from "../_models/user";
 import { UserService } from "../_services/user.service";

@@ -42,6 +42,7 @@ import { TabsModule } from "ngx-bootstrap/tabs";
 import { PreventUnsavedChanges } from "./_guards/prevent-unsaved-changes.guard";
 import { MessageTimePipe } from "./_pipes/messageTimePipe";
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -83,7 +84,8 @@ export function tokenGetter() {
         blacklistedRoutes: ["localhost:5000/api/auth"]
       }
     }),
-    FileUploadModule
+    FileUploadModule,
+    BrowserAnimationsModule
   ],
   providers: [
     AuthService,

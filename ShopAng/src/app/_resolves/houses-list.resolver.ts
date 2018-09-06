@@ -7,9 +7,9 @@ import {
 import { House } from "../_models/house";
 import { HouseService } from "../_services/house.service";
 import { AlertifyService } from "../_services/alertify.service";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs/";
 import { catchError } from "rxjs/operators";
-import { of } from "rxjs/observable/of";
+
 
 @Injectable()
 export class HouseListResolver implements Resolve<House[]> {
