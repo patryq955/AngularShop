@@ -24,9 +24,9 @@ export const appRoutes: Routes = [
     component: HouseDetailComponent,
     resolve: { house: HouseDetailResolver }
   },
-  { path: "kontakt", component: ContactComponent },
+  // { path: "kontakt", component: ContactComponent },
   {
-    path: "",
+    path: "", 
     runGuardsAndResolvers: "always",
     canActivate: [AuthGuard],
     children: [
@@ -37,7 +37,8 @@ export const appRoutes: Routes = [
         component: MemberEditComponent,
         resolve: { user: MemberEditResolver },
         canDeactivate: [PreventUnsavedChanges]
-      }
+      },
+      {path:"kontakt",component: ContactComponent, data: {roles: ['Admin']}}
     ]
   },
   { path: "**", redirectTo: "", pathMatch: "full" }

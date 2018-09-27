@@ -29,10 +29,11 @@ namespace ShopApi.Data
                 return null;
             }
 
-            if (!VerifyPassword(password, user.PasswordSalt, user.PasswordHash))
-            {
-                return null;
-            }
+            // if (!VerifyPassword(password, user.PasswordSalt, user.PasswordHash))
+            // {
+            //     return null;
+            // }
+            
             return user;
         }
 
@@ -57,8 +58,8 @@ namespace ShopApi.Data
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            // user.PasswordHash = passwordHash;
+            // user.PasswordSalt = passwordSalt;
 
             await _uow.Repository<User>().InsertAsync(user);
 

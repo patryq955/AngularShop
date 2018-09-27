@@ -35,6 +35,7 @@ export class NavComponent implements OnInit {
       },
       error => {
         this.alertifyService.error(error.error);
+        console.log(error);
       }
     );
   }

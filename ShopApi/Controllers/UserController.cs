@@ -14,7 +14,6 @@ using ShopApi.Helpers;
 
 namespace ShopApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     [ServiceFilter(typeof(LogUserActivity))]

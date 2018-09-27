@@ -16,7 +16,6 @@ using ShopApi.Models;
 
 namespace ShopApi.Controllers
 {
-    [Authorize]
     [Route("api/user/{userId}/photos")]
     [ApiController]
     public class PhotoController : BaseController

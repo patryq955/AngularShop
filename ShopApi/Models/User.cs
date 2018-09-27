@@ -1,19 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace ShopApi.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        [Key]
-        public int Id { get; set; }
-
-        [MinLength(6, ErrorMessage = "Login jest za krótki")]
-        public string UserName { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-
         public string Gender { get; set; }
 
         public DateTime DateOfBirth { get; set; }
@@ -33,6 +26,8 @@ namespace ShopApi.Models
         public ICollection<House> Houses { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
-        
-}
+
+        public ICollection<UserRole> UserRoles { get; set; }
+
+    }
 }

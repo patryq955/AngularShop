@@ -23,27 +23,22 @@ export class AuthService {
   }
 
   login(model: any) {
-
-    return this.http
-      .post<string>(this.baseUrl + "login", model)
-      .pipe(
-        map((response: any) => {
-          const user = response;
-          if (user) {
-            localStorage.setItem("token", user.tokenString);
-            localStorage.setItem("user", JSON.stringify(user.user));
-            this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
-            this.currentUser = user.user;
-            this.changeMemberPhoto(this.currentUser.urlPhoto);
-          }
-        })
-      );
+    return this.http.post<string>(this.baseUrl + "login", model).pipe(
+      map((response: any) => {
+        const user = response;
+        if (user) {
+          localStorage.setItem("token", user.token);
+          localStorage.setItem("user", JSON.stringify(user.user));
+          this.decodedToken = this.jwtHelper.decodeToken(user.token);
+          this.currentUser = user.usertToReturn;
+          this.changeMemberPhoto(this.currentUser.urlPhoto);
+        }
+      })
+    );
   }
 
   register(user: User) {
-    return this.http
-      .post(this.baseUrl + "register", user);
-      
+    return this.http.post(this.baseUrl + "register", user);
   }
 
   loggedIn() {
@@ -52,29 +47,24 @@ export class AuthService {
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  // private getHeaders() {
-  //   const httpOptions = {
-  //     headers: new HttpHeaders({
-  //       "Content-Type": "application/json",
-  //       "Access-Control-Allow-Origin": "*"
-  //     })
-  //   };
-  //   return httpOptions;
-  // }
+  private getHeaders() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      })
+    };
+    return httpOptions;
+  }
 
-  // private handleError(error: any) {
-  //   const applicationError = error.headers.get("Application-Error");
-  //   if (applicationError) {
-  //     return Observable.throw(applicationError);
-  //   }
-  //   let modelStateError = "";
-  //   if (error.error) {
-  //     for (const key in error.error) {
-  //       if (error.error[key]) {
-  //         modelStateError += error.error[key] + ". \n";
-  //       }
-  //     }
-  //   }
-  //   return Observable.throw(modelStateError || "Błąd serwera");
-  // }
+  roleMatch(allowedRoles): boolean {
+    const userRoles = this.decodedToken.role as Array<string>;
+    allowedRoles.forEach(element => {
+      if (userRoles.includes(element)) {
+        return true;
+      }
+    });
+
+    return false;
+  }
 }

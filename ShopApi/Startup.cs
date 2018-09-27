@@ -22,6 +22,10 @@ using ShopApi.Data;
 using ShopApi.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using ShopApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ShopApi
 {
@@ -43,44 +47,43 @@ namespace ShopApi
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-     
-            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
+
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            ConfigureIdentity(services);
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("pl-PL");
             });
-            services.AddMvc().AddJsonOptions(
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddJsonOptions(
                 opt =>
                 {
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 }
-            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);;
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1); ;
             services.AddCors();
 
-            //Depedency Injection
-            services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IGenericUnitOfWork, GenericUnitOfWork>();
+            Mapper.Reset();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.AddTransient<Seed>();
             services.AddAutoMapper();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-               .AddJwtBearer(options =>
-               {
-                   options.TokenValidationParameters = new TokenValidationParameters
-                   {
-                       ValidateIssuerSigningKey = true,
-                       IssuerSigningKey = new SymmetricSecurityKey(key),
-                       ValidateIssuer = false,
-                       ValidateAudience = false
-                   };
-               });
 
-               services.AddScoped<LogUserActivity>();
+            //Depedency Injection
+            services.AddScoped<IGenericUnitOfWork, GenericUnitOfWork>();
+            services.AddScoped<LogUserActivity>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seed)
         {
             if (env.IsDevelopment())
             {
@@ -103,12 +106,58 @@ namespace ShopApi
                 );
                 app.UseHsts();
             }
+            seed.SeedUsers();
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
             app.UseAuthentication();
             // app.UseHttpsRedirection();
             app.UseCookiePolicy();
             app.UseMvc();
-        
+
         }
+
+        #region private
+        private void ConfigureIdentity(IServiceCollection services)
+        {
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
+
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 6;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+              .AddJwtBearer(options =>
+              {
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateIssuerSigningKey = true,
+                      IssuerSigningKey = new SymmetricSecurityKey(key),
+                      ValidateIssuer = false,
+                      ValidateAudience = false
+                  };
+              });
+
+              services.AddAuthorization(options =>{
+                  options.AddPolicy("RequireAdminRole",policy => policy.RequireRole("Admin"));
+                  options.AddPolicy("UserRole",policy => policy.RequireRole("User"));
+                  options.AddPolicy("AllUser",policy => policy.RequireRole("User","Admin"));
+              });
+        }
+
+
+
+        #endregion
     }
+
+
+
 }
